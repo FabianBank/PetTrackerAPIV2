@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import static javax.ws.rs.HttpMethod.POST;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -53,6 +56,22 @@ public class PetOwnerService extends BaseService {
         
         GenericEntity<List<PetOwner>> entity = new GenericEntity<List<PetOwner>>(output) {};
         return Response.status(200).entity(entity).build();
+    }
+    
+    @POST
+    @Path("/create")
+    public Response addPetOwner(@HeaderParam("username") String name, @HeaderParam("password") String password) {
+        PetOwner owner = new PetOwner();
+        
+        try {
+            owner.setUsername(name);
+            owner.setPassword(password);
+            dao.create(owner);
+        } catch (SQLException ex) {
+            Logger.getLogger(PetOwnerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return Response.status(200).entity(true).build();
     }
 }
 
