@@ -18,32 +18,34 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import model.Pet;
 import model.PetOwner;
 
 /**
  *
  * @author Fabian
  */
-@Path("/petowner")
-public class PetOwnerService extends BaseService {
+@Path("/pet")
+public class PetService extends BaseService {
     
-    private Dao<PetOwner, Integer> dao;
+    private Dao<Pet, Integer> dao;
     
-    public PetOwnerService() {
+     public PetService() {
         try {
-            dao = DaoManager.createDao(super.db, PetOwner.class);
+            dao = DaoManager.createDao(super.db, Pet.class);
             
             if(!dao.isTableExists()) {
-                TableUtils.createTable(db, PetOwner.class); //Bag
+                TableUtils.createTable(db, Pet.class); //Bag
             }
         } catch (SQLException ex) {
             Logger.getLogger(PetOwnerService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    @Path("/all")
+     
+     @Path("/all")
     @GET
-    public Response getPetOwners() {
-        List<PetOwner> output = new ArrayList<>();
+    public Response getPets() {
+        List<Pet> output = new ArrayList<>();
        
         try {
             output = dao.queryForAll();
@@ -51,8 +53,8 @@ public class PetOwnerService extends BaseService {
             Logger.getLogger(PetOwner.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GenericEntity<List<PetOwner>> entity = new GenericEntity<List<PetOwner>>(output) {};
+        GenericEntity<List<Pet>> entity = new GenericEntity<List<Pet>>(output) {};
         return Response.status(200).entity(entity).build();
     }
+    
 }
-
