@@ -14,7 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -55,6 +58,59 @@ public class PetService extends BaseService {
         
         GenericEntity<List<Pet>> entity = new GenericEntity<List<Pet>>(output) {};
         return Response.status(200).entity(entity).build();
+    }
+    
+    @Path("/delete")
+    @DELETE
+    public Response deletePetOwner(@HeaderParam("idpet") int id) {
+        List<Pet> output = new ArrayList<>();
+        Pet input = new Pet();
+        input.setIdpet(id);
+        
+        try {
+            dao.deleteById(input.getIdpet());
+        } catch (SQLException ex) {
+            Logger.getLogger(PetOwner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        GenericEntity<List<Pet>> entity = new GenericEntity<List<Pet>>(output) {
+        };
+        return Response.status(200).entity(entity).build();
+    }
+    
+    @POST
+    @Path("/create")
+    public Response addPet(@HeaderParam("name") String name,
+            @HeaderParam("color") String color,
+            @HeaderParam("age") String age,
+            @HeaderParam("type") String type,
+            @HeaderParam("longitude") String longitude,
+            @HeaderParam("latitude") String latitude,
+            @HeaderParam("lost") int lost)
+            throws SQLException {
+        Pet pet = new Pet();
+        List<Pet> pets = new ArrayList<>();
+        
+        pet.setName(name);
+        pet.setColor(color);
+        pet.setAge(age);
+        pet.setType(type);
+        pet.setLongitude(longitude);
+        pet.setLatitude(latitude);
+        pet.setLost(lost);
+        
+        
+        pets = dao.queryForAll();
+//        System.out.println("PETOWNER->" + petOwners);
+        //TODO Fix this!
+        try {
+                dao.create(pet);
+            } catch (SQLException ex) {
+                Logger.getLogger(PetOwnerService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+
+        return Response.status(200).entity(true).build();
     }
     
 }
