@@ -77,6 +77,21 @@ public class PetService extends BaseService {
         return Response.status(200).entity(entity).build();
     }
     
+    @Path("/details")
+    @GET
+    public Response getDetails(@HeaderParam("id") String id) {
+        Pet output = new Pet();
+        
+        try {
+            output = dao.queryForId(Integer.parseInt(id));
+        } catch (SQLException ex) {
+            Logger.getLogger(PetOwner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        GenericEntity<Pet> entity = new GenericEntity<Pet>(output) {};
+        return Response.status(200).entity(entity).build();
+    }
+    
     @Path("/delete")
     @DELETE
     public Response deletePetOwner(@HeaderParam("idpet") int id) {
