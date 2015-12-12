@@ -112,9 +112,4 @@ public class Pet {
     public void setLost(Boolean lost) {
         this.lost = lost;
     }
-    
-    
-   
-    
-    
 }

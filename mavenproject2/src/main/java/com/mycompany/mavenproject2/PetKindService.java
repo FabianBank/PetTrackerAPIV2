@@ -22,58 +22,42 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import model.Pet;
+import model.PetKind;
 import model.PetOwner;
 
 /**
  *
  * @author Fabian
  */
-@Path("/pet")
-public class PetService extends BaseService {
+@Path("/kind")
+public class PetKindService extends BaseService {
     
-    private Dao<Pet, Integer> dao;
+    private Dao<PetKind, Integer> dao;
     
-     public PetService() {
+     public PetKindService() {
         try {
-            dao = DaoManager.createDao(super.db, Pet.class);
+            dao = DaoManager.createDao(super.db, PetKind.class);
             
             if(!dao.isTableExists()) {
-                TableUtils.createTable(db, Pet.class); //Bag
+                TableUtils.createTable(db, PetKind.class); //Bag
             }
         } catch (SQLException ex) {
-            Logger.getLogger(PetOwnerService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PetKindService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
      
-    @Path("/all")
+     @Path("/all")
     @GET
     public Response getPets() {
-        List<Pet> output = new ArrayList<>();
+        List<PetKind> output = new ArrayList<>();
        
         try {
             output = dao.queryForAll();
         } catch (SQLException ex) {
-            Logger.getLogger(PetOwner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PetKindService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        GenericEntity<List<Pet>> entity = new GenericEntity<List<Pet>>(output) {};
-        return Response.status(200).entity(entity).build();
-    }
-    
-    @Path("/allkind")
-    @GET
-    public Response getallkind(@HeaderParam("kind") String kind) {
-        List<Pet> output = new ArrayList<>();
-        Pet pet = new Pet();
-        pet.setType(kind);
-       
-        try {
-            output = dao.queryForMatchingArgs(pet);
-        } catch (SQLException ex) {
-            Logger.getLogger(PetOwner.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        GenericEntity<List<Pet>> entity = new GenericEntity<List<Pet>>(output) {};
+        GenericEntity<List<PetKind>> entity = new GenericEntity<List<PetKind>>(output) {};
         return Response.status(200).entity(entity).build();
     }
     
@@ -87,7 +71,7 @@ public class PetService extends BaseService {
         try {
             dao.deleteById(input.getIdpet());
         } catch (SQLException ex) {
-            Logger.getLogger(PetOwner.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PetKindService.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         GenericEntity<List<Pet>> entity = new GenericEntity<List<Pet>>(output) {
@@ -97,32 +81,20 @@ public class PetService extends BaseService {
     
     @POST
     @Path("/create")
-    public Response addPet(@HeaderParam("name") String name,
-            @HeaderParam("color") String color,
-            @HeaderParam("age") int age,
-            @HeaderParam("type") String type,
-            @HeaderParam("longitude") int longitude,
-            @HeaderParam("latitude") int latitude,
-            @HeaderParam("lost") boolean lost)
+    public Response addPet(@HeaderParam("kind") String kind)
             throws SQLException {
-        Pet pet = new Pet();
-        List<Pet> pets = new ArrayList<>();
+        PetKind petKind = new PetKind();
+        List<PetKind> pets = new ArrayList<>();
         
-        pet.setName(name);
-        pet.setColor(color);
-        pet.setAge(age);
-        pet.setType(type);
-        pet.setLongitude(longitude);
-        pet.setLatitude(latitude);
-        pet.setLost(lost);
+        petKind.setKind(kind);
         
         pets = dao.queryForAll();
 //        System.out.println("PETOWNER->" + petOwners);
         //TODO Fix this!
         try {
-                dao.create(pet);
+                dao.create(petKind);
             } catch (SQLException ex) {
-                Logger.getLogger(PetOwnerService.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(PetKindService.class.getName()).log(Level.SEVERE, null, ex);
             }
         
 

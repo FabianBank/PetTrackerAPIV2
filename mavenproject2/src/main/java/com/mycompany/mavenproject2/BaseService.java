@@ -23,9 +23,9 @@ public class BaseService {
     protected ConnectionSource db;
     
     public BaseService() {
-        String mysql_url    = "jdbc:mysql://localhost/zsteurp001";
+        String mysql_url    = "jdbc:mysql://localhost:3306/zsteurp001";
         String mysql_user   = "root";
-        String mysql_pass   = "";
+        String mysql_pass   = "p@vilion21";
         
         try {
             this.db = new JdbcConnectionSource(mysql_url, mysql_user, mysql_pass);
