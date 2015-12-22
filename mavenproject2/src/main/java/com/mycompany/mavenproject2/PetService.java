@@ -110,6 +110,24 @@ public class PetService extends BaseService {
         return Response.status(200).entity(entity).build();
     }
     
+    @GET
+    @Path("/my")
+    public Response myPets(@HeaderParam("owner") int owner) {
+        List<Pet> output = new ArrayList<>();
+        Pet input = new Pet();
+        input.setOwnerid(owner);
+        
+        try {
+            output = dao.queryForMatchingArgs(input);
+        } catch (SQLException ex) {
+            Logger.getLogger(PetOwner.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        GenericEntity<List<Pet>> entity = new GenericEntity<List<Pet>>(output) {
+        };
+        return Response.status(200).entity(entity).build();
+    }
+    
     @POST
     @Path("/create")
     public Response addPet(@HeaderParam("name") String name,
@@ -118,7 +136,8 @@ public class PetService extends BaseService {
             @HeaderParam("type") String type,
             @HeaderParam("longitude") int longitude,
             @HeaderParam("latitude") int latitude,
-            @HeaderParam("lost") boolean lost)
+            @HeaderParam("lost") boolean lost,
+            @HeaderParam("owner") int owner)
             throws SQLException {
         Pet pet = new Pet();
         List<Pet> pets = new ArrayList<>();
@@ -130,6 +149,7 @@ public class PetService extends BaseService {
         pet.setLongitude(longitude);
         pet.setLatitude(latitude);
         pet.setLost(lost);
+        pet.setOwnerid(owner);
         
         pets = dao.queryForAll();
 //        System.out.println("PETOWNER->" + petOwners);
