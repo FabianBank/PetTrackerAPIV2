@@ -112,10 +112,10 @@ public class PetService extends BaseService {
     
     @GET
     @Path("/my")
-    public Response myPets(@HeaderParam("owner") int owner) {
+    public Response myPets(@HeaderParam("owner") String owner) {
         List<Pet> output = new ArrayList<>();
         Pet input = new Pet();
-        input.setOwnerid(owner);
+        input.setOwnerid(Integer.parseInt(owner));
         
         try {
             output = dao.queryForMatchingArgs(input);
