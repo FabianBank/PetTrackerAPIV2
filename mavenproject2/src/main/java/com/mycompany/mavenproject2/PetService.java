@@ -132,24 +132,24 @@ public class PetService extends BaseService {
     @Path("/create")
     public Response addPet(@HeaderParam("name") String name,
             @HeaderParam("color") String color,
-            @HeaderParam("age") int age,
+            @HeaderParam("age") String age,
             @HeaderParam("type") String type,
-            @HeaderParam("longitude") int longitude,
-            @HeaderParam("latitude") int latitude,
+            @HeaderParam("longitude") double longitude,
+            @HeaderParam("latitude") double latitude,
             @HeaderParam("lost") boolean lost,
-            @HeaderParam("owner") int owner)
+            @HeaderParam("owner") String owner)
             throws SQLException {
         Pet pet = new Pet();
         List<Pet> pets = new ArrayList<>();
         
         pet.setName(name);
         pet.setColor(color);
-        pet.setAge(age);
+        pet.setAge(Integer.parseInt(age));
         pet.setType(type);
         pet.setLongitude(longitude);
         pet.setLatitude(latitude);
         pet.setLost(lost);
-        pet.setOwnerid(owner);
+        pet.setOwnerid(Integer.parseInt(owner));
         
         pets = dao.queryForAll();
 //        System.out.println("PETOWNER->" + petOwners);
